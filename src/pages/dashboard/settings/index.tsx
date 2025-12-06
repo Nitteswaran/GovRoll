@@ -9,18 +9,35 @@ import { useToast } from '@/hooks/use-toast'
 import { Sparkles, CreditCard } from 'lucide-react'
 import { createCheckoutSession, createPortalSession, stripePromise, STRIPE_PRICE_PREMIUM } from '@/lib/stripe'
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 export function SettingsPage() {
   const { user } = useAuthStore()
   const { subscription, fetchSubscription, isPremium } = useSubscriptionStore()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
 
   useEffect(() => {
     if (user) {
       fetchSubscription(user.id)
     }
   }, [user, fetchSubscription])
+
+  useEffect(() => {
+    if (searchParams.get('success')) {
+      toast({
+        title: 'Payment Successful',
+        description: 'Your subscription has been upgraded to Premium!',
+      })
+      if (user) {
+        fetchSubscription(user.id)
+      }
+      // Clean up the URL
+      searchParams.delete('success')
+      setSearchParams(searchParams)
+    }
+  }, [searchParams, toast, user, fetchSubscription, setSearchParams])
 
   const handleUpgrade = async () => {
     if (!STRIPE_PRICE_PREMIUM) {
