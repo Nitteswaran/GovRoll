@@ -27,6 +27,7 @@ serve(async (req) => {
     const body = await req.text()
     
     // It is highly recommended to use webhook signature verification in production.
+    // For live mode, you should uncomment this line:
     // const event = await stripe.webhooks.constructEvent(body, signature, STRIPE_WEBHOOK_SECRET)
     const event: Stripe.Event = JSON.parse(body)
     console.log(`Received Stripe event: ${event.type} (${event.id})`)
@@ -115,7 +116,8 @@ serve(async (req) => {
 
         let tier: 'free' | 'premium' = 'free'
         const priceId = subscription.items?.data[0]?.price?.id
-        if (priceId === Deno.env.get('STRIPE_PRICE_PREMIUM')) {
+        // Fixed: Use PREMIUM_PRICE_ID constant instead of Deno.env.get directly
+        if (priceId === PREMIUM_PRICE_ID) {
           tier = 'premium'
         }
 

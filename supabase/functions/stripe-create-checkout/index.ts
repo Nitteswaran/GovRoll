@@ -14,12 +14,22 @@ serve(async (req) => {
 
   try {
     if (!STRIPE_SECRET) {
-      throw new Error('STRIPE_SECRET_KEY is not configured')
+      throw new Error('STRIPE_SECRET_KEY is not configured in Supabase Edge Function secrets')
+    }
+
+    // Validate Stripe key mode
+    if (!STRIPE_SECRET.startsWith('sk_live_') && !STRIPE_SECRET.startsWith('sk_test_')) {
+      throw new Error('Invalid STRIPE_SECRET_KEY format. Must start with sk_live_ or sk_test_')
     }
 
     const { priceId } = await req.json()
     if (!priceId) {
       throw new Error('priceId is required')
+    }
+
+    // Validate price ID format
+    if (!priceId.startsWith('price_')) {
+      throw new Error('Invalid priceId format. Must start with price_')
     }
 
     const authHeader = req.headers.get('Authorization')
@@ -69,7 +79,14 @@ serve(async (req) => {
 
     if (!stripeResponse.ok) {
       console.error('Stripe API error:', session)
-      throw new Error(session.error?.message || `Stripe API returned ${stripeResponse.status}`)
+      const errorMsg = session.error?.message || `Stripe API returned ${stripeResponse.status}`
+      
+      // Provide helpful error message for mode mismatch
+      if (errorMsg.includes('live mode') && errorMsg.includes('test mode')) {
+        throw new Error(`Stripe mode mismatch: ${errorMsg}. Ensure STRIPE_SECRET_KEY in Supabase matches your price ID mode (live/test).`)
+      }
+      
+      throw new Error(errorMsg)
     }
 
     if (session.error) {

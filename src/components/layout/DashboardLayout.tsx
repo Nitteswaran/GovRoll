@@ -4,6 +4,7 @@ import { useAuthStore } from '@/store/auth-store'
 import { useCompanyStore } from '@/store/company-store'
 import { useSubscriptionStore } from '@/store/subscription-store'
 import { Button } from '@/components/ui/button'
+import logo from '@/assets/logo.png'
 import {
   LayoutDashboard,
   Building2,
@@ -87,7 +88,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         } fixed lg:static lg:translate-x-0 z-30 w-64 bg-white border-r border-gray-200 transition-transform duration-200 ease-in-out lg:flex flex-col h-full`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:justify-center">
-          <h1 className="text-xl font-bold text-primary">GovRoll</h1>
+          <img src={logo} alt="GovRoll" className="h-32 w-auto" />
           <Button
             variant="ghost"
             size="icon"
@@ -206,7 +207,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="flex items-center space-x-4 ml-auto">
             {subscription && (
               <Badge variant={subscription.subscription_tier === 'premium' ? 'default' : 'secondary'}>
-                {subscription.subscription_tier}
+                {subscription.subscription_tier.toUpperCase()}
               </Badge>
             )}
             <span className="text-sm text-gray-600">{user?.email}</span>
