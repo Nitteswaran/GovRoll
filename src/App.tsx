@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { supabase } from './lib/supabase'
 import { useAuthStore } from './store/auth-store'
@@ -22,6 +22,7 @@ import { AnomalyDetectionPage } from './pages/dashboard/anomaly-detection/index'
 import { ReportsPage } from './pages/dashboard/reports/index'
 import { AutomationPage } from './pages/dashboard/automation/index'
 import { AuditLogsPage } from './pages/dashboard/audit-logs/index'
+import { LandingPage } from './pages/landing/index'
 import { Toaster } from './components/ui/toaster'
 
 const queryClient = new QueryClient()
@@ -195,7 +196,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<LandingPage />} />
         </Routes>
         <Toaster />
       </BrowserRouter>

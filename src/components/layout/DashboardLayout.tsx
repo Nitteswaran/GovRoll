@@ -88,7 +88,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         } fixed lg:static lg:translate-x-0 z-30 w-64 bg-white border-r border-gray-200 transition-transform duration-200 ease-in-out lg:flex flex-col h-full`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:justify-center">
-          <img src={logo} alt="GovRoll" className="h-32 w-auto" />
+          <img src={logo} alt="GovRoll" className="h-16 w-auto" />
           <Button
             variant="ghost"
             size="icon"
