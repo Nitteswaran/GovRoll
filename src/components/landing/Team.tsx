@@ -6,7 +6,7 @@ const teamMembers = [
     name: 'Nittes',
     role: 'CEO & Founder',
     description:
-      'Nittes is the founder of GovRoll, and passionate about helping businesses streamline their payroll processes.',
+      'Nittes is the founder of GovRoll, and passionate about building software solutions that help businesses grow.',
     image: null,
     linkedin: 'https://www.linkedin.com/in/nittes',
     instagram: 'https://www.instagram.com/nitttees_/',

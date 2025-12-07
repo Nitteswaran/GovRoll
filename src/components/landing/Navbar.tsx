@@ -20,7 +20,7 @@ export function Navbar() {
   }, [])
 
   const navLinks = [
-    { label: 'About us', href: '#about' },
+    { label: 'About', href: '#about' },
     { label: 'Features', href: '#features' },
     { label: 'Pricing', href: '#pricing' }
   ]
@@ -44,7 +44,7 @@ export function Navbar() {
               src={logo}
               alt="GovRoll"
               className="h-16 w-auto"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             />
           </Link>
