@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 const brands = [
-  'Company 1',
+  'Google',
   'Company 2',
   'Company 3',
   'Company 4',

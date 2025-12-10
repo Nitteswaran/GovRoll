@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 import logo from '@/assets/logo.png'
-import { Features } from './Features'
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -24,6 +23,25 @@ export function Navbar() {
     { label: 'Features', href: '#features' },
     { label: 'Pricing', href: '#pricing' }
   ]
+
+  const handleNavClick = (href: string) => {
+    if (href.startsWith('#')) {
+      const id = href.slice(1)
+      const element = document.getElementById(id)
+      if (element) {
+        const offset = 80
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+        const offsetPosition = elementPosition - offset
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        })
+      }
+    } else {
+      navigate(href)
+    }
+  }
 
   return (
     <motion.nav
@@ -49,16 +67,16 @@ export function Navbar() {
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <Link
+              <button
                 key={link.label}
-                to={link.href}
+                type="button"
+                onClick={() => handleNavClick(link.href)}
                 className="text-gray-700 hover:text-primary transition-colors duration-200 font-medium text-sm"
               >
                 {link.label}
-              </Link>
+              </button>
             ))}
             <Button
               onClick={() => navigate('/login')}
@@ -91,14 +109,17 @@ export function Navbar() {
             className="md:hidden py-4 space-y-4"
           >
             {navLinks.map((link) => (
-              <Link
+              <button
                 key={link.label}
-                to={link.href}
-                className="block text-gray-700 hover:text-primary transition-colors duration-200 font-medium"
-                onClick={() => setIsMobileMenuOpen(false)}
+                type="button"
+                onClick={() => {
+                  handleNavClick(link.href)
+                  setIsMobileMenuOpen(false)
+                }}
+                className="block w-full text-left text-gray-700 hover:text-primary transition-colors duration-200 font-medium"
               >
                 {link.label}
-              </Link>
+              </button>
             ))}
             <Button
               onClick={() => {

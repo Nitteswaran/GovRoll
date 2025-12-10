@@ -12,6 +12,7 @@ export function Register() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [role, setRole] = useState<'employer' | 'employee'>('employer')
   const navigate = useNavigate()
   const { toast } = useToast()
 
@@ -42,6 +43,9 @@ export function Register() {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: { role },
+        },
       })
 
       if (error) throw error
@@ -51,7 +55,11 @@ export function Register() {
         description: 'Account created! Please check your email to verify your account.',
       })
 
-      navigate('/login')
+      if (role === 'employee') {
+        navigate('/employee/login')
+      } else {
+        navigate('/login')
+      }
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -74,6 +82,27 @@ export function Register() {
         </CardHeader>
         <form onSubmit={handleRegister}>
           <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label>I am a</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  type="button"
+                  variant={role === 'employer' ? 'default' : 'outline'}
+                  className="w-full"
+                  onClick={() => setRole('employer')}
+                >
+                  Employer / HR / Manager
+                </Button>
+                <Button
+                  type="button"
+                  variant={role === 'employee' ? 'default' : 'outline'}
+                  className="w-full"
+                  onClick={() => setRole('employee')}
+                >
+                  Employee
+                </Button>
+              </div>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input

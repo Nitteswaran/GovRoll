@@ -30,6 +30,11 @@ const faqs = [
     answer:
       "Getting started is easy! Simply sign up for a free account through our website, or contact us for a demo. We'll schedule an initial consultation to discuss your payroll requirements, company structure, and compliance needs. From there, we'll help you set up your account and import your employee data. Once you're ready, we'll guide you through your first payroll run and start making payroll management effortless for your business.",
   },
+  {
+    question: 'Is GovRoll pricing really worth it?',
+    answer:
+      "Yes. Our goal is to make every sen you spend on GovRoll come back to you in saved time, reduced errors, and stronger compliance. Beyond the core platform, we're building AI-powered capabilities – including a retrieval-augmented assistant and an agent that automates routine HR and employer tasks – so you get faster answers, fewer manual steps, and more strategic bandwidth for your team.",
+  },
 ]
 
 export function FAQ() {
@@ -37,7 +42,7 @@ export function FAQ() {
   const navigate = useNavigate()
 
   return (
-    <section className="py-24 bg-white">
+    <section id="pricing" className="py-24 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

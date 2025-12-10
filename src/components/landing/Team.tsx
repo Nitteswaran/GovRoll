@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Linkedin, Instagram, Github } from 'lucide-react'
+import boyImg from '@/assets/boy.png'
 
 const teamMembers = [
   {
@@ -7,7 +8,7 @@ const teamMembers = [
     role: 'CEO & Founder',
     description:
       'Nittes is the founder of GovRoll, and passionate about building software solutions that help businesses grow.',
-    image: null,
+    image: boyImg,
     linkedin: 'https://www.linkedin.com/in/nittes',
     instagram: 'https://www.instagram.com/nitttees_/',
     github: 'https://github.com/Nitteswaran',

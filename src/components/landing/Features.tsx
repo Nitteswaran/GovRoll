@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Calculator, Users, FileCheck, ArrowRight } from 'lucide-react'
+import { Calculator, Users, FileCheck, ArrowRight, Clock, Send, Code } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const features = [
@@ -22,6 +22,27 @@ const features = [
     title: 'Employee Management',
     description:
       "Employee data management is the heartbeat of efficient payroll. Our innovative system fosters an environment that keeps your employee records organized and accessible. We're in the business of building efficiency, not just managing data.",
+    link: '#',
+  },
+  {
+    icon: Code,
+    title: 'AI-Powered Payroll & HR Assistant',
+    description:
+      'We are building an AI layer on top of GovRoll that uses retrieval-augmented generation to understand your policies, past payroll runs, and Malaysian regulations. This assistant will help answer complex payroll questions, surface the right information instantly, and automate repetitive HR and employer workflows – making every ringgit you invest in GovRoll work harder for you.',
+    link: '#',
+  },
+  {
+    icon: Clock,
+    title: 'Employee Clock In / Out Portal',
+    description:
+      'Employees can securely log in to GovRoll to clock in and out of work, giving you accurate, real-time attendance data that feeds directly into payroll – no more manual time tracking or spreadsheets.',
+    link: '#',
+  },
+  {
+    icon: Send,
+    title: 'Employer Control & Smart Report Delivery',
+    description:
+      'Employers maintain complete control over employee access and data, and can send payslips and compliance-ready reports to employees directly through GovRoll with just a few clicks.',
     link: '#',
   },
 ]

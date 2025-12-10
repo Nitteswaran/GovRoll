@@ -1,6 +1,5 @@
 import { Navbar } from '@/components/landing/Navbar'
 import { Hero } from '@/components/landing/Hero'
-import { Brands } from '@/components/landing/Brands'
 import { Features } from '@/components/landing/Features'
 import { Team } from '@/components/landing/Team'
 import { FAQ } from '@/components/landing/FAQ'
@@ -13,7 +12,6 @@ export function LandingPage() {
     <div className="min-h-screen bg-white">
       <Navbar />
       <Hero />
-      <Brands />
       <Features />
       <Team />
       <FAQ />

@@ -302,3 +302,54 @@ Premium features require a Stripe subscription (RM79/month). Set up:
 
 MIT
 
+## GovRoll AI – Live Autonomous HR Agent (Planned)
+
+GovRoll AI is a planned intelligent agent that will live inside the GovRoll payroll system and perform complex HR and payroll tasks on command. Instead of just answering questions or generating static reports, it will:
+
+- Retrieve live data from your system and display it dynamically (e.g. last month’s OT for a specific employee).
+- Generate payroll-related documents (EPF, SOCSO, payslips) and other compliance reports automatically.
+- Execute multi-step tasks by interacting with the database and internal pages like a human-like agent.
+- Provide contextual answers to Malaysian compliance questions and HR best practices.
+
+In short, the AI acts as a live assistant that observes, reasons, and acts on your payroll data in real time, responding to natural-language prompts from managers or HR.
+
+### Recommended RAG + Agent Tech Stack (Draft)
+
+- **Base Model**
+  - LLaMA 3 8B (local inference or free/low-cost cloud, e.g. vLLM, Hugging Face)
+  - Supports fine-tuning and custom embeddings if needed
+
+- **Vector Store / Knowledge Base**
+  - Supabase + `pgvector` for:
+    - Structured employee + payroll data
+    - Past reports
+    - Compliance documents and HR manuals
+  - Used for RAG retrieval during reasoning
+
+- **Agent Orchestration / Action Execution**
+  - LangChain (Node.js or Python) for chaining reasoning + tool calls:
+    - Fetch data from Supabase
+    - Generate documents
+    - Stream results back to the UI
+  - Define tool wrappers such as:
+    - `getEmployeeOT(employeeId)`
+    - `generateEPFReport(employeeId | companyId)`
+
+- **Embeddings / RAG Layer**
+  - Convert internal HR manuals, compliance PDFs, and historical payroll data into embeddings.
+  - Use Gemini or LLaMA-based embeddings (local or hosted).
+
+- **Frontend Interaction**
+  - React / (optionally Next.js for future) UI that streams AI actions live (Cursor-style):
+    - Show progress while the AI fetches data, generates PDFs, or visualizes stats.
+    - Allow step-by-step confirmations from HR/management for sensitive actions.
+
+- **PDF / Report Generation**
+  - `pdf-lib` or `jsPDF` for dynamic PDF and report creation (aligned with existing GovRoll generators).
+
+- **Security & Compliance**
+  - Row-level security (RLS) and row-level access control in Supabase so the agent only sees allowed data.
+  - Full action logging for audit and compliance review (what the AI accessed, generated, or changed).
+
+> This section is design/reference only for now and will guide the future GovRoll AI implementation.
+
