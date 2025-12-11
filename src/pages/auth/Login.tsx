@@ -26,12 +26,18 @@ export function Login() {
 
       if (error) throw error
 
+      const role = data.user?.user_metadata?.role
+
       toast({
         title: 'Success',
         description: 'Logged in successfully',
       })
 
-      navigate('/dashboard')
+      if (role === 'employee') {
+        navigate('/employee')
+      } else {
+        navigate('/dashboard')
+      }
     } catch (error: any) {
       toast({
         title: 'Error',
