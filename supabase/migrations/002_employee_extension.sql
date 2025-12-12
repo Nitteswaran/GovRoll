@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS employee_accounts (
 
 ALTER TABLE employee_accounts ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Employers can manage employee accounts for their companies" ON employee_accounts;
 CREATE POLICY "Employers can manage employee accounts for their companies"
 ON employee_accounts
 FOR ALL
@@ -61,6 +62,7 @@ CREATE TABLE IF NOT EXISTS payslips (
 
 ALTER TABLE payslips ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Employers can manage payslips for their companies" ON payslips;
 CREATE POLICY "Employers can manage payslips for their companies"
 ON payslips
 FOR ALL
@@ -90,6 +92,7 @@ CREATE TABLE IF NOT EXISTS leave_requests (
 
 ALTER TABLE leave_requests ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Employers can manage leave requests for their companies" ON leave_requests;
 CREATE POLICY "Employers can manage leave requests for their companies"
 ON leave_requests
 FOR ALL
@@ -117,6 +120,7 @@ CREATE TABLE IF NOT EXISTS attendance (
 
 ALTER TABLE attendance ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Employers can view attendance for their companies" ON attendance;
 CREATE POLICY "Employers can view attendance for their companies"
 ON attendance
 FOR SELECT

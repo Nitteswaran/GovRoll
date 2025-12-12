@@ -115,17 +115,23 @@ export function MultiCompanyPage() {
 
   const inviteUserMutation = useMutation({
     mutationFn: async ({ email, role }: { email: string; role: string }) => {
-      // Find user by email
-      const { data: authUser } = await supabase.auth.admin.listUsers()
-      const targetUser = authUser?.users.find((u) => u.email === email)
+      // Call the secure RPC function to check if user exists
+      const { data: targetUserId, error: rpcError } = await supabase.rpc('get_user_id_by_email', {
+        email_input: email,
+      })
 
-      if (!targetUser) {
+      if (rpcError) {
+        console.error('RPC Error:', rpcError)
+        throw new Error('Failed to verify user existence')
+      }
+
+      if (!targetUserId) {
         throw new Error('User not found. They must register first.')
       }
 
       const { error } = await supabase.from('company_users').insert({
         company_id: company?.id,
-        user_id: targetUser.id,
+        user_id: targetUserId,
         role,
         invited_by: user?.id,
       })
@@ -304,7 +310,16 @@ export function MultiCompanyPage() {
                     <TableBody>
                       {companyUsers.map((cu) => (
                         <TableRow key={cu.id}>
-                          <TableCell>{cu.user?.email || 'N/A'}</TableCell>
+                          <TableCell>
+                            <div className="flex flex-col">
+                              <span>{cu.user?.email || 'N/A'}</span>
+                              {!cu.accepted_at && (
+                                <span className="text-xs text-amber-600 font-medium">
+                                  (Pending Acceptance)
+                                </span>
+                              )}
+                            </div>
+                          </TableCell>
                           <TableCell>
                             <span className="px-2 py-1 rounded text-xs bg-gray-100">
                               {cu.role}

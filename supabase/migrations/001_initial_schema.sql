@@ -60,19 +60,23 @@ ALTER TABLE payroll_runs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE payroll_items ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for companies
+DROP POLICY IF EXISTS "Users can view their own companies" ON companies;
 CREATE POLICY "Users can view their own companies"
   ON companies FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert their own companies" ON companies;
 CREATE POLICY "Users can insert their own companies"
   ON companies FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own companies" ON companies;
 CREATE POLICY "Users can update their own companies"
   ON companies FOR UPDATE
   USING (auth.uid() = user_id);
 
 -- RLS Policies for employees
+DROP POLICY IF EXISTS "Users can view employees of their companies" ON employees;
 CREATE POLICY "Users can view employees of their companies"
   ON employees FOR SELECT
   USING (
@@ -81,6 +85,7 @@ CREATE POLICY "Users can view employees of their companies"
     )
   );
 
+DROP POLICY IF EXISTS "Users can insert employees to their companies" ON employees;
 CREATE POLICY "Users can insert employees to their companies"
   ON employees FOR INSERT
   WITH CHECK (
@@ -89,6 +94,7 @@ CREATE POLICY "Users can insert employees to their companies"
     )
   );
 
+DROP POLICY IF EXISTS "Users can update employees of their companies" ON employees;
 CREATE POLICY "Users can update employees of their companies"
   ON employees FOR UPDATE
   USING (
@@ -97,6 +103,7 @@ CREATE POLICY "Users can update employees of their companies"
     )
   );
 
+DROP POLICY IF EXISTS "Users can delete employees of their companies" ON employees;
 CREATE POLICY "Users can delete employees of their companies"
   ON employees FOR DELETE
   USING (
@@ -106,6 +113,7 @@ CREATE POLICY "Users can delete employees of their companies"
   );
 
 -- RLS Policies for payroll_runs
+DROP POLICY IF EXISTS "Users can view payroll runs of their companies" ON payroll_runs;
 CREATE POLICY "Users can view payroll runs of their companies"
   ON payroll_runs FOR SELECT
   USING (
@@ -114,6 +122,7 @@ CREATE POLICY "Users can view payroll runs of their companies"
     )
   );
 
+DROP POLICY IF EXISTS "Users can insert payroll runs to their companies" ON payroll_runs;
 CREATE POLICY "Users can insert payroll runs to their companies"
   ON payroll_runs FOR INSERT
   WITH CHECK (
@@ -122,6 +131,7 @@ CREATE POLICY "Users can insert payroll runs to their companies"
     )
   );
 
+DROP POLICY IF EXISTS "Users can update payroll runs of their companies" ON payroll_runs;
 CREATE POLICY "Users can update payroll runs of their companies"
   ON payroll_runs FOR UPDATE
   USING (
@@ -131,6 +141,7 @@ CREATE POLICY "Users can update payroll runs of their companies"
   );
 
 -- RLS Policies for payroll_items
+DROP POLICY IF EXISTS "Users can view payroll items of their companies" ON payroll_items;
 CREATE POLICY "Users can view payroll items of their companies"
   ON payroll_items FOR SELECT
   USING (
@@ -141,6 +152,7 @@ CREATE POLICY "Users can view payroll items of their companies"
     )
   );
 
+DROP POLICY IF EXISTS "Users can insert payroll items to their companies" ON payroll_items;
 CREATE POLICY "Users can insert payroll items to their companies"
   ON payroll_items FOR INSERT
   WITH CHECK (
@@ -151,6 +163,7 @@ CREATE POLICY "Users can insert payroll items to their companies"
     )
   );
 
+DROP POLICY IF EXISTS "Users can update payroll items of their companies" ON payroll_items;
 CREATE POLICY "Users can update payroll items of their companies"
   ON payroll_items FOR UPDATE
   USING (
@@ -161,6 +174,7 @@ CREATE POLICY "Users can update payroll items of their companies"
     )
   );
 
+DROP POLICY IF EXISTS "Users can delete payroll items of their companies" ON payroll_items;
 CREATE POLICY "Users can delete payroll items of their companies"
   ON payroll_items FOR DELETE
   USING (

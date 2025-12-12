@@ -6,10 +6,13 @@ ALTER TABLE employees
   ADD COLUMN IF NOT EXISTS auth_user_id UUID REFERENCES auth.users(id);
 
 -- Allow employees to view and update their own profile
+-- Allow employees to view and update their own profile
+DROP POLICY IF EXISTS "Employees can view their own profile" ON employees;
 CREATE POLICY "Employees can view their own profile"
   ON employees FOR SELECT
   USING (auth_user_id = auth.uid());
 
+DROP POLICY IF EXISTS "Employees can update their own profile" ON employees;
 CREATE POLICY "Employees can update their own profile"
   ON employees FOR UPDATE
   USING (auth_user_id = auth.uid())
@@ -31,6 +34,8 @@ CREATE TABLE IF NOT EXISTS employee_invites (
 ALTER TABLE employee_invites ENABLE ROW LEVEL SECURITY;
 
 -- Employers (company owners) can manage invites for their companies
+-- Employers (company owners) can manage invites for their companies
+DROP POLICY IF EXISTS "Employers can manage employee invites for their companies" ON employee_invites;
 CREATE POLICY "Employers can manage employee invites for their companies"
   ON employee_invites
   FOR ALL

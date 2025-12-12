@@ -120,15 +120,19 @@ ALTER TABLE payroll_automation_rules ENABLE ROW LEVEL SECURITY;
 ALTER TABLE email_notifications ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for subscriptions
+-- RLS Policies for subscriptions
+DROP POLICY IF EXISTS "Users can view their own subscription" ON subscriptions;
 CREATE POLICY "Users can view their own subscription"
   ON subscriptions FOR SELECT
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update their own subscription" ON subscriptions;
 CREATE POLICY "Users can update their own subscription"
   ON subscriptions FOR UPDATE
   USING (auth.uid() = user_id);
 
 -- RLS Policies for company_users
+DROP POLICY IF EXISTS "Users can view company_users of their companies" ON company_users;
 CREATE POLICY "Users can view company_users of their companies"
   ON company_users FOR SELECT
   USING (
@@ -137,6 +141,7 @@ CREATE POLICY "Users can view company_users of their companies"
     ) OR user_id = auth.uid()
   );
 
+DROP POLICY IF EXISTS "Admins can manage company_users" ON company_users;
 CREATE POLICY "Admins can manage company_users"
   ON company_users FOR ALL
   USING (
@@ -147,6 +152,7 @@ CREATE POLICY "Admins can manage company_users"
   );
 
 -- RLS Policies for scheduled_payrolls
+DROP POLICY IF EXISTS "Users can manage scheduled_payrolls of their companies" ON scheduled_payrolls;
 CREATE POLICY "Users can manage scheduled_payrolls of their companies"
   ON scheduled_payrolls FOR ALL
   USING (
@@ -158,6 +164,7 @@ CREATE POLICY "Users can manage scheduled_payrolls of their companies"
   );
 
 -- RLS Policies for audit_logs
+DROP POLICY IF EXISTS "Users can view audit_logs of their companies" ON audit_logs;
 CREATE POLICY "Users can view audit_logs of their companies"
   ON audit_logs FOR SELECT
   USING (
@@ -169,6 +176,7 @@ CREATE POLICY "Users can view audit_logs of their companies"
   );
 
 -- RLS Policies for payroll_run_snapshots
+DROP POLICY IF EXISTS "Users can view snapshots of their companies" ON payroll_run_snapshots;
 CREATE POLICY "Users can view snapshots of their companies"
   ON payroll_run_snapshots FOR SELECT
   USING (
@@ -180,6 +188,7 @@ CREATE POLICY "Users can view snapshots of their companies"
   );
 
 -- RLS Policies for anomaly_detections
+DROP POLICY IF EXISTS "Users can view anomalies of their companies" ON anomaly_detections;
 CREATE POLICY "Users can view anomalies of their companies"
   ON anomaly_detections FOR SELECT
   USING (
@@ -190,6 +199,7 @@ CREATE POLICY "Users can view anomalies of their companies"
     )
   );
 
+DROP POLICY IF EXISTS "Users can update anomalies of their companies" ON anomaly_detections;
 CREATE POLICY "Users can update anomalies of their companies"
   ON anomaly_detections FOR UPDATE
   USING (
@@ -201,6 +211,7 @@ CREATE POLICY "Users can update anomalies of their companies"
   );
 
 -- RLS Policies for payroll_automation_rules
+DROP POLICY IF EXISTS "Users can manage automation rules of their companies" ON payroll_automation_rules;
 CREATE POLICY "Users can manage automation rules of their companies"
   ON payroll_automation_rules FOR ALL
   USING (
@@ -212,6 +223,7 @@ CREATE POLICY "Users can manage automation rules of their companies"
   );
 
 -- RLS Policies for email_notifications
+DROP POLICY IF EXISTS "Users can view their email notifications" ON email_notifications;
 CREATE POLICY "Users can view their email notifications"
   ON email_notifications FOR SELECT
   USING (user_id = auth.uid() OR recipient_email = (SELECT email FROM auth.users WHERE id = auth.uid()));
