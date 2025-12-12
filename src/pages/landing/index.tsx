@@ -3,7 +3,6 @@ import { Hero } from '@/components/landing/Hero'
 import { Features } from '@/components/landing/Features'
 import { Team } from '@/components/landing/Team'
 import { FAQ } from '@/components/landing/FAQ'
-import { CaseStudies } from '@/components/landing/CaseStudies'
 import { Testimonials } from '@/components/landing/Testimonials'
 import { Footer } from '@/components/landing/Footer'
 
@@ -15,7 +14,6 @@ export function LandingPage() {
       <Features />
       <Team />
       <FAQ />
-      <CaseStudies />
       <Testimonials />
       <Footer />
     </div>

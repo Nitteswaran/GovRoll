@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
+import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button'
 
 export function Hero() {
   const navigate = useNavigate()
@@ -70,14 +71,11 @@ export function Hero() {
               variants={itemVariants}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <Button
-                size="lg"
+              <InteractiveHoverButton
                 onClick={() => navigate('/register')}
-                className="group"
-              >
-                Get Started
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
+                text="Get Started"
+                className="w-40"
+              />
               <Button
                 size="lg"
                 variant="outline"
