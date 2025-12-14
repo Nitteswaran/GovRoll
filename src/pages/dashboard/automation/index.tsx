@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { FeatureGate } from '@/hooks/use-feature-gate'
 import { useCompanyStore } from '@/store/company-store'
 import { supabase } from '@/lib/supabase'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -26,6 +26,7 @@ import {
 import { Plus, Zap, Trash2, ToggleLeft, ToggleRight } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useToast } from '@/hooks/use-toast'
+import RippleWaveLoader from '@/components/ui/ripple-wave-loader'
 
 interface AutomationRule {
   id: string
@@ -209,7 +210,7 @@ export function AutomationPage() {
                           ...formData,
                           conditions: JSON.parse(e.target.value),
                         })
-                      } catch {}
+                      } catch { }
                     }}
                     placeholder='{"hours": ">40", "day": "weekend"}'
                   />
@@ -225,7 +226,7 @@ export function AutomationPage() {
                           ...formData,
                           actions: JSON.parse(e.target.value),
                         })
-                      } catch {}
+                      } catch { }
                     }}
                     placeholder='{"multiplier": 1.5, "base_rate": "hourly"}'
                   />
@@ -250,7 +251,9 @@ export function AutomationPage() {
         <Card>
           <CardContent className="pt-6">
             {isLoading ? (
-              <div className="text-center py-8">Loading...</div>
+              <div className="flex justify-center py-8">
+                <RippleWaveLoader />
+              </div>
             ) : rules && rules.length > 0 ? (
               <Table>
                 <TableHeader>

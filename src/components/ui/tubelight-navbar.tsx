@@ -25,11 +25,11 @@ export function NavBar({ items, className, header, footer, onItemClick }: NavBar
     return (
         <div
             className={cn(
-                "fixed bottom-0 sm:top-0 left-1/2 -translate-x-1/2 z-50 mb-6 sm:mt-6",
+                "fixed bottom-0 sm:top-0 left-1/2 -translate-x-1/2 z-50 mb-6 sm:mt-6 pointer-events-none",
                 className,
             )}
         >
-            <div className="flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-3 rounded-full shadow-lg">
+            <div className="flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-3 rounded-full shadow-lg pointer-events-auto">
                 {header && (
                     <div className="pl-4 pr-1 shrink-0">
                         {header}

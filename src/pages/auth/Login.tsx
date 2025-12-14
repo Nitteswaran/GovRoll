@@ -19,25 +19,21 @@ export function Login() {
     setLoading(true)
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
       if (error) throw error
 
-      const role = data.user?.user_metadata?.role
+
 
       toast({
         title: 'Success',
         description: 'Logged in successfully',
       })
 
-      if (role === 'employee') {
-        navigate('/employee')
-      } else {
-        navigate('/dashboard')
-      }
+      navigate('/dashboard')
     } catch (error: any) {
       toast({
         title: 'Error',

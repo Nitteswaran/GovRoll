@@ -17,7 +17,7 @@ const teamMembers = [
 
 export function Team() {
   return (
-    <section id="about" className="py-24 bg-gray-50">
+    <section id="about" className="py-24 relative z-10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16">
           <motion.div

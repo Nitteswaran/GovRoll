@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCompanyStore } from '@/store/company-store'
 import { supabase } from '@/lib/supabase'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -15,9 +15,10 @@ import {
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Plus, Eye, Download } from 'lucide-react'
+import { Plus, Eye } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useToast } from '@/hooks/use-toast'
+import RippleWaveLoader from '@/components/ui/ripple-wave-loader'
 
 interface PayrollRun {
   id: string
@@ -164,7 +165,9 @@ export function PayrollPage() {
       <Card>
         <CardContent className="pt-6">
           {isLoading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="flex justify-center py-8">
+              <RippleWaveLoader />
+            </div>
           ) : payrollRuns && payrollRuns.length > 0 ? (
             <Table>
               <TableHeader>
@@ -181,11 +184,10 @@ export function PayrollPage() {
                     <TableCell className="font-medium">{run.period}</TableCell>
                     <TableCell>
                       <span
-                        className={`px-2 py-1 rounded text-xs ${
-                          run.status === 'completed'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-yellow-100 text-yellow-800'
-                        }`}
+                        className={`px-2 py-1 rounded text-xs ${run.status === 'completed'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                          }`}
                       >
                         {run.status}
                       </span>

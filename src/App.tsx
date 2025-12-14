@@ -5,7 +5,6 @@ import { supabase } from './lib/supabase'
 import { useAuthStore } from './store/auth-store'
 import { ProtectedRoute } from './lib/protected-route'
 import { DashboardLayout } from './components/layout/DashboardLayout'
-import { EmployeeLayout } from './components/layout/EmployeeLayout'
 import { Login } from './pages/auth/Login'
 import { Register } from './pages/auth/Register'
 import { ForgotPassword } from './pages/auth/ForgotPassword'
@@ -24,12 +23,6 @@ import { ReportsPage } from './pages/dashboard/reports/index'
 import { AutomationPage } from './pages/dashboard/automation/index'
 import { AuditLogsPage } from './pages/dashboard/audit-logs/index'
 import { LandingPage } from './pages/landing/index'
-import { EmployeeDashboard } from './pages/employee/Dashboard'
-import { EmployeePayslips } from './pages/employee/Payslips'
-import { EmployeeAttendance } from './pages/employee/Attendance'
-import { EmployeeLeave } from './pages/employee/Leave'
-import { EmployeeProfile } from './pages/employee/Profile'
-import { EmployeeDocuments } from './pages/employee/Documents'
 import { Toaster } from './components/ui/toaster'
 
 const queryClient = new QueryClient()
@@ -63,66 +56,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route
-            path="/employee"
-            element={
-              <ProtectedRoute>
-                <EmployeeLayout>
-                  <EmployeeDashboard />
-                </EmployeeLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/payslips"
-            element={
-              <ProtectedRoute>
-                <EmployeeLayout>
-                  <EmployeePayslips />
-                </EmployeeLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/attendance"
-            element={
-              <ProtectedRoute>
-                <EmployeeLayout>
-                  <EmployeeAttendance />
-                </EmployeeLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/leave"
-            element={
-              <ProtectedRoute>
-                <EmployeeLayout>
-                  <EmployeeLeave />
-                </EmployeeLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/profile"
-            element={
-              <ProtectedRoute>
-                <EmployeeLayout>
-                  <EmployeeProfile />
-                </EmployeeLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/documents"
-            element={
-              <ProtectedRoute>
-                <EmployeeLayout>
-                  <EmployeeDocuments />
-                </EmployeeLayout>
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="/dashboard"
             element={

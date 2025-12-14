@@ -4,17 +4,10 @@ import { useCompanyStore } from '@/store/company-store'
 import { useAuthStore } from '@/store/auth-store'
 import { supabase } from '@/lib/supabase'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import RippleWaveLoader from '@/components/ui/ripple-wave-loader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import {
   Dialog,
   DialogContent,
@@ -24,34 +17,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Plus, Users, Building2, Crown } from 'lucide-react'
+import { Plus, Building2, Crown } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useToast } from '@/hooks/use-toast'
 
-interface CompanyUser {
-  id: string
-  company_id: string
-  user_id: string
-  role: 'admin' | 'accountant' | 'staff'
-  user?: {
-    email: string
-  }
-  company?: {
-    company_name: string
-  }
-}
-
 export function MultiCompanyPage() {
   const { user } = useAuthStore()
-  const { company, fetchCompany } = useCompanyStore()
+  const { company, fetchCompany, setCompany } = useCompanyStore()
   const { toast } = useToast()
   const queryClient = useQueryClient()
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [inviteDialogOpen, setInviteDialogOpen] = useState(false)
-  const [inviteEmail, setInviteEmail] = useState('')
-  const [inviteRole, setInviteRole] = useState<'admin' | 'accountant' | 'staff'>('staff')
 
-  const { data: companies } = useQuery({
+  const { data: companies, isLoading } = useQuery({
     queryKey: ['user-companies', user?.id],
     queryFn: async () => {
       if (!user?.id) return []
@@ -65,21 +42,6 @@ export function MultiCompanyPage() {
       return data
     },
     enabled: !!user?.id,
-  })
-
-  const { data: companyUsers } = useQuery({
-    queryKey: ['company-users', company?.id],
-    queryFn: async () => {
-      if (!company?.id) return []
-      const { data, error } = await supabase
-        .from('company_users')
-        .select('*, user:users(email), company:companies(company_name)')
-        .eq('company_id', company.id)
-
-      if (error) throw error
-      return data as CompanyUser[]
-    },
-    enabled: !!company?.id,
   })
 
   const createCompanyMutation = useMutation({
@@ -113,56 +75,13 @@ export function MultiCompanyPage() {
     },
   })
 
-  const inviteUserMutation = useMutation({
-    mutationFn: async ({ email, role }: { email: string; role: string }) => {
-      // Call the secure RPC function to check if user exists
-      const { data: targetUserId, error: rpcError } = await supabase.rpc('get_user_id_by_email', {
-        email_input: email,
-      })
+  // ... createCompanyMutation ...
 
-      if (rpcError) {
-        console.error('RPC Error:', rpcError)
-        throw new Error('Failed to verify user existence')
-      }
-
-      if (!targetUserId) {
-        throw new Error('User not found. They must register first.')
-      }
-
-      const { error } = await supabase.from('company_users').insert({
-        company_id: company?.id,
-        user_id: targetUserId,
-        role,
-        invited_by: user?.id,
-      })
-
-      if (error) throw error
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['company-users'] })
-      setInviteDialogOpen(false)
-      setInviteEmail('')
-      toast({
-        title: 'Success',
-        description: 'User invited successfully',
-      })
-    },
-    onError: (error: any) => {
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to invite user',
-        variant: 'destructive',
-      })
-    },
-  })
-
-  const switchCompany = async (companyId: string) => {
-    // In a real implementation, you'd update the selected company
-    // For now, just refresh the company data
-    await fetchCompany(user?.id || '')
+  const switchCompany = (selectedCompany: any) => {
+    setCompany(selectedCompany)
     toast({
       title: 'Company Switched',
-      description: 'You are now viewing the selected company',
+      description: `You are now viewing ${selectedCompany.company_name}`,
     })
   }
 
@@ -175,7 +94,7 @@ export function MultiCompanyPage() {
               <Building2 className="h-8 w-8" />
               Multi-Company Management
             </h1>
-            <p className="text-gray-600 mt-2">Manage multiple companies and team members</p>
+            <p className="text-gray-600 mt-2">Manage multiple companies</p>
           </div>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
@@ -206,14 +125,18 @@ export function MultiCompanyPage() {
               <CardDescription>Switch between companies</CardDescription>
             </CardHeader>
             <CardContent>
-              {companies && companies.length > 0 ? (
+              {isLoading ? (
+                <div className="flex justify-center py-4">
+                  <RippleWaveLoader />
+                </div>
+              ) : companies && companies.length > 0 ? (
                 <div className="space-y-2">
                   {companies.map((comp: any) => (
                     <Button
                       key={comp.id}
                       variant={company?.id === comp.id ? 'default' : 'outline'}
                       className="w-full justify-start"
-                      onClick={() => switchCompany(comp.id)}
+                      onClick={() => switchCompany(comp)}
                     >
                       <Building2 className="h-4 w-4 mr-2" />
                       {comp.company_name}
@@ -226,113 +149,6 @@ export function MultiCompanyPage() {
               ) : (
                 <p className="text-gray-500 text-center py-4">No companies yet</p>
               )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Team Members</CardTitle>
-              <CardDescription>Manage users for current company</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" className="w-full">
-                      <Users className="h-4 w-4 mr-2" />
-                      Invite User
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Invite User</DialogTitle>
-                      <DialogDescription>
-                        Invite a user to join this company
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-4 py-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={inviteEmail}
-                          onChange={(e) => setInviteEmail(e.target.value)}
-                          placeholder="user@example.com"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="role">Role</Label>
-                        <select
-                          id="role"
-                          value={inviteRole}
-                          onChange={(e) =>
-                            setInviteRole(e.target.value as 'admin' | 'accountant' | 'staff')
-                          }
-                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                        >
-                          <option value="staff">Staff</option>
-                          <option value="accountant">Accountant</option>
-                          <option value="admin">Admin</option>
-                        </select>
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button
-                        variant="outline"
-                        onClick={() => setInviteDialogOpen(false)}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={() =>
-                          inviteUserMutation.mutate({
-                            email: inviteEmail,
-                            role: inviteRole,
-                          })
-                        }
-                        disabled={inviteUserMutation.isPending}
-                      >
-                        {inviteUserMutation.isPending ? 'Inviting...' : 'Invite'}
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-
-                {companyUsers && companyUsers.length > 0 ? (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Role</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {companyUsers.map((cu) => (
-                        <TableRow key={cu.id}>
-                          <TableCell>
-                            <div className="flex flex-col">
-                              <span>{cu.user?.email || 'N/A'}</span>
-                              {!cu.accepted_at && (
-                                <span className="text-xs text-amber-600 font-medium">
-                                  (Pending Acceptance)
-                                </span>
-                              )}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <span className="px-2 py-1 rounded text-xs bg-gray-100">
-                              {cu.role}
-                            </span>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                ) : (
-                  <p className="text-gray-500 text-center py-4">No team members yet</p>
-                )}
-              </div>
             </CardContent>
           </Card>
         </div>

@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useState } from 'react'
+import RippleWaveLoader from '@/components/ui/ripple-wave-loader'
 
 interface AuditLog {
   id: string
@@ -90,7 +91,9 @@ export function AuditLogsPage() {
               />
             </div>
             {isLoading ? (
-              <div className="text-center py-8">Loading...</div>
+              <div className="flex justify-center py-8">
+                <RippleWaveLoader />
+              </div>
             ) : logs && logs.length > 0 ? (
               <Table>
                 <TableHeader>

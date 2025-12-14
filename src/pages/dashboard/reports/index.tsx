@@ -14,9 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { BarChart3, Download, FileText } from 'lucide-react'
+import { BarChart3, Download } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { useToast } from '@/hooks/use-toast'
+import RippleWaveLoader from '@/components/ui/ripple-wave-loader'
 
 export function ReportsPage() {
   const { company } = useCompanyStore()
@@ -106,9 +107,9 @@ export function ReportsPage() {
       item.bonus || 0,
       item.deductions || 0,
       (item.employee?.base_salary || 0) +
-        (item.employee?.allowance || 0) +
-        (item.overtime || 0) +
-        (item.bonus || 0),
+      (item.employee?.allowance || 0) +
+      (item.overtime || 0) +
+      (item.bonus || 0),
     ])
 
     const csvContent = [headers, ...rows]
@@ -212,7 +213,9 @@ export function ReportsPage() {
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="text-center py-8">Loading...</div>
+              <div className="flex justify-center py-8">
+                <RippleWaveLoader />
+              </div>
             ) : reportData && reportData.length > 0 ? (
               <Table>
                 <TableHeader>

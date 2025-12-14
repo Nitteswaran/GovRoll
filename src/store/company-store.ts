@@ -34,13 +34,13 @@ export const useCompanyStore = create<CompanyState>((set) => ({
         .from('companies')
         .select('*')
         .eq('user_id', userId)
-        .single()
+        .limit(1)
+        .maybeSingle()
 
-      if (error && error.code !== 'PGRST116') {
-        throw error
-      }
+      if (error) throw error
 
-      set({ company: data || null, loading: false })
+      console.log('Fetched company:', data)
+      set({ company: data, loading: false })
     } catch (error) {
       console.error('Error fetching company:', error)
       set({ company: null, loading: false })

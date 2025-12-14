@@ -1,0 +1,36 @@
+﻿src/components/landing/Hero.tsx(4,1): error TS6133: 'ArrowRight' is declared but its value is never read.
+src/hooks/use-feature-gate.tsx(26,29): error TS6133: 'isPremium' is declared but its value is never read.
+src/hooks/use-feature-gate.tsx(44,9): error TS6133: 'navigate' is declared but its value is never read.
+src/pages/auth/Register.tsx(43,15): error TS6133: 'data' is declared but its value is never read.
+src/pages/dashboard/automation/index.tsx(5,29): error TS6133: 'CardDescription' is declared but its value is never read.
+src/pages/dashboard/automation/index.tsx(5,46): error TS6133: 'CardHeader' is declared but its value is never read.
+src/pages/dashboard/automation/index.tsx(5,58): error TS6133: 'CardTitle' is declared but its value is never read.
+src/pages/dashboard/bulk-payslips/index.tsx(15,27): error TS6133: 'CheckCircle' is declared but its value is never read.
+src/pages/dashboard/bulk-payslips/index.tsx(15,40): error TS6133: 'XCircle' is declared but its value is never read.
+src/pages/dashboard/bulk-payslips/index.tsx(18,1): error TS6133: 'useParams' is declared but its value is never read.
+src/pages/dashboard/employees/index.tsx(5,29): error TS6133: 'CardDescription' is declared but its value is never read.
+src/pages/dashboard/employees/index.tsx(5,46): error TS6133: 'CardHeader' is declared but its value is never read.
+src/pages/dashboard/employees/index.tsx(5,58): error TS6133: 'CardTitle' is declared but its value is never read.
+src/pages/dashboard/employees/index.tsx(39,9): error TS6133: 'navigate' is declared but its value is never read.
+src/pages/dashboard/index.tsx(1,1): error TS6133: 'useEffect' is declared but its value is never read.
+src/pages/dashboard/multi-company/index.tsx(159,32): error TS6133: 'companyId' is declared but its value is never read.
+src/pages/dashboard/multi-company/index.tsx(316,36): error TS2339: Property 'accepted_at' does not exist on type 'CompanyUser'.
+src/pages/dashboard/payroll/[runId].tsx(1,20): error TS6133: 'useEffect' is declared but its value is never read.
+src/pages/dashboard/payroll/[runId].tsx(15,93): error TS6133: 'DialogTrigger' is declared but its value is never read.
+src/pages/dashboard/payroll/[runId].tsx(368,30): error TS2322: Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'BlobPart'.
+  Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'ArrayBufferView<ArrayBuffer>'.
+    Types of property 'buffer' are incompatible.
+      Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+        Type 'SharedArrayBuffer' is not assignable to type 'ArrayBuffer'.
+          Types of property '[Symbol.toStringTag]' are incompatible.
+            Type '"SharedArrayBuffer"' is not assignable to type '"ArrayBuffer"'.
+src/pages/dashboard/payroll/index.tsx(5,29): error TS6133: 'CardDescription' is declared but its value is never read.
+src/pages/dashboard/payroll/index.tsx(5,46): error TS6133: 'CardHeader' is declared but its value is never read.
+src/pages/dashboard/payroll/index.tsx(5,58): error TS6133: 'CardTitle' is declared but its value is never read.
+src/pages/dashboard/payroll/index.tsx(18,21): error TS6133: 'Download' is declared but its value is never read.
+src/pages/dashboard/reports/index.tsx(17,31): error TS6133: 'FileText' is declared but its value is never read.
+src/pages/dashboard/scheduled-payroll/index.tsx(5,29): error TS6133: 'CardDescription' is declared but its value is never read.
+src/pages/dashboard/scheduled-payroll/index.tsx(5,46): error TS6133: 'CardHeader' is declared but its value is never read.
+src/pages/dashboard/scheduled-payroll/index.tsx(5,58): error TS6133: 'CardTitle' is declared but its value is never read.
+src/pages/dashboard/submissions/index.tsx(2,1): error TS6133: 'Button' is declared but its value is never read.
+src/pages/dashboard/submissions/index.tsx(11,1): error TS6192: All imports in import declaration are unused.

@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+
 import { useCompanyStore } from '@/store/company-store'
 import { supabase } from '@/lib/supabase'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -18,6 +18,9 @@ import { Label } from '@/components/ui/label'
 import { Plus, Edit, Trash2 } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useToast } from '@/hooks/use-toast'
+import { ImportEmployeesDialog } from '@/components/employees/ImportEmployeesDialog'
+import RippleWaveLoader from '@/components/ui/ripple-wave-loader'
+import PulsatingDots from '@/components/ui/pulsating-loader'
 
 interface Employee {
   id: string
@@ -36,7 +39,7 @@ interface Employee {
 }
 
 export function EmployeesPage() {
-  const navigate = useNavigate()
+
   const { company } = useCompanyStore()
   const { toast } = useToast()
   const queryClient = useQueryClient()
@@ -365,22 +368,22 @@ export function EmployeesPage() {
                   Cancel
                 </Button>
                 <Button type="submit" disabled={saveMutation.isPending}>
-                  {saveMutation.isPending
-                    ? 'Saving...'
-                    : editingEmployee
-                    ? 'Update'
-                    : 'Create'}
+                  {saveMutation.isPending ? <PulsatingDots /> : editingEmployee ? 'Update' : 'Create'}
                 </Button>
               </DialogFooter>
             </form>
           </DialogContent>
         </Dialog>
+
+        <ImportEmployeesDialog onSuccess={() => queryClient.invalidateQueries({ queryKey: ['employees'] })} />
       </div>
 
       <Card>
         <CardContent className="pt-6">
           {isLoading ? (
-            <div className="text-center py-8">Loading...</div>
+            <div className="flex justify-center py-8">
+              <RippleWaveLoader />
+            </div>
           ) : employees && employees.length > 0 ? (
             <Table>
               <TableHeader>
@@ -438,7 +441,7 @@ export function EmployeesPage() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </div >
   )
 }
 

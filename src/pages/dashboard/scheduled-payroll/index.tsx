@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { FeatureGate } from '@/hooks/use-feature-gate'
 import { useCompanyStore } from '@/store/company-store'
 import { supabase } from '@/lib/supabase'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -26,6 +26,7 @@ import {
 import { Plus, Calendar, Play, Pause, Trash2 } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useToast } from '@/hooks/use-toast'
+import RippleWaveLoader from '@/components/ui/ripple-wave-loader'
 
 interface ScheduledPayroll {
   id: string
@@ -258,7 +259,9 @@ export function ScheduledPayrollPage() {
         <Card>
           <CardContent className="pt-6">
             {isLoading ? (
-              <div className="text-center py-8">Loading...</div>
+              <div className="flex justify-center py-8">
+                <RippleWaveLoader />
+              </div>
             ) : scheduledPayrolls && scheduledPayrolls.length > 0 ? (
               <Table>
                 <TableHeader>
@@ -284,11 +287,10 @@ export function ScheduledPayrollPage() {
                       </TableCell>
                       <TableCell>
                         <span
-                          className={`px-2 py-1 rounded text-xs ${
-                            schedule.status === 'active'
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-gray-100 text-gray-800'
-                          }`}
+                          className={`px-2 py-1 rounded text-xs ${schedule.status === 'active'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-gray-100 text-gray-800'
+                            }`}
                         >
                           {schedule.status}
                         </span>

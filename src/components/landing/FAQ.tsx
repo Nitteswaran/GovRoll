@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useNavigate } from 'react-router-dom'
+import { buttonVariants } from '@/components/ui/button'
+
 
 const faqs = [
   {
@@ -39,10 +39,9 @@ const faqs = [
 
 export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
-  const navigate = useNavigate()
 
   return (
-    <section id="faq" className="py-24 bg-white">
+    <section id="faq" className="py-24 relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -110,7 +109,7 @@ export function FAQ() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center"
+          className="text-center relative z-20"
         >
           <h3 className="text-2xl font-bold text-gray-900 mb-2">
             Still have questions?
@@ -119,9 +118,13 @@ export function FAQ() {
             Contact one of our experts to find out how we can help your business
             today.
           </p>
-          <Button size="lg" onClick={() => navigate('/register')}>
+          <a
+            href="https://wa.me/60124760876"
+            target="_blank"
+            className={buttonVariants({ size: 'lg' })}
+          >
             Get in touch
-          </Button>
+          </a>
         </motion.div>
       </div>
     </section>

@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button'
 
 export function Hero() {
@@ -31,7 +30,7 @@ export function Hero() {
   } as const
 
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden bg-gradient-to-br from-gray-50 to-white">
+    <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}

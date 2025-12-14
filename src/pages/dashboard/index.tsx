@@ -1,14 +1,18 @@
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCompanyStore } from '@/store/company-store'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Building2, Users, Calculator, FileText } from 'lucide-react'
+import { useAuthStore } from '@/store/auth-store'
+import { useToast } from '@/hooks/use-toast'
+import { Building2, Users, Calculator, FileText, Plus } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
+import RippleWaveLoader from '@/components/ui/ripple-wave-loader'
 
 export function Dashboard() {
   const navigate = useNavigate()
+  const { user } = useAuthStore()
+  const { toast } = useToast()
   const { company } = useCompanyStore()
 
   const { data: stats } = useQuery({
@@ -35,6 +39,31 @@ export function Dashboard() {
     enabled: !!company?.id,
   })
 
+  const { data: userCompanies, isLoading: loadingCompanies } = useQuery({
+    queryKey: ['user-companies-list', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return []
+      const { data, error } = await supabase
+        .from('companies')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data
+    },
+    enabled: !!user?.id && !company,
+  })
+
+  // Function to manually set company from the list
+  const selectCompany = (selected: any) => {
+    useCompanyStore.getState().setCompany(selected)
+    toast({
+      title: 'Company Selected',
+      description: `Switched to ${selected.company_name}`,
+    })
+  }
+
   if (!company) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -42,13 +71,50 @@ export function Dashboard() {
           <CardHeader>
             <CardTitle>Welcome to GovRoll</CardTitle>
             <CardDescription>
-              Get started by creating your company profile
+              {loadingCompanies
+                ? 'Fetching your companies'
+                : userCompanies && userCompanies.length > 0
+                  ? 'Select a company to continue'
+                  : 'Get started by creating your company profile'}
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Button onClick={() => navigate('/dashboard/company')}>
-              Create Company Profile
-            </Button>
+          <CardContent className="space-y-4">
+            {loadingCompanies ? (
+              <div className="flex justify-center py-4">
+                <RippleWaveLoader />
+              </div>
+            ) : userCompanies && userCompanies.length > 0 ? (
+              <div className="space-y-2">
+                {userCompanies.map((comp: any) => (
+                  <Button
+                    key={comp.id}
+                    variant="outline"
+                    className="w-full justify-start text-left"
+                    onClick={() => selectCompany(comp)}
+                  >
+                    <Building2 className="h-4 w-4 mr-2" />
+                    <div>
+                      <div className="font-medium">{comp.company_name}</div>
+                      <div className="text-xs text-gray-500">{comp.registration_number}</div>
+                    </div>
+                  </Button>
+                ))}
+                <div className="pt-2 border-t mt-4">
+                  <Button
+                    className="w-full"
+                    variant="ghost"
+                    onClick={() => navigate('/dashboard/company')}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create New Company
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <Button onClick={() => navigate('/dashboard/company')} className="w-full">
+                Create Company Profile
+              </Button>
+            )}
           </CardContent>
         </Card>
       </div>
