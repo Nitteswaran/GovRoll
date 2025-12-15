@@ -1,48 +1,66 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+"use client";
+
+import * as React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
+
 import { supabase } from '@/lib/supabase'
+import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { useToast } from '@/hooks/use-toast'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import logo from '@/assets/logo.png';
+import loginFormImage from '@/assets/loginform.png';
+
+// Validation schema for the form
+const formSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email." }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters." }),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 export function Register() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const role = 'employer'
+  const [isLoading, setIsLoading] = React.useState(false)
   const navigate = useNavigate()
   const { toast } = useToast()
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
+  // Hardcoded role as per previous logic
+  const role = 'employer'
 
-    if (password !== confirmPassword) {
-      toast({
-        title: 'Error',
-        description: 'Passwords do not match',
-        variant: 'destructive',
-      })
-      return
-    }
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
 
-    if (password.length < 6) {
-      toast({
-        title: 'Error',
-        description: 'Password must be at least 6 characters',
-        variant: 'destructive',
-      })
-      return
-    }
-
-    setLoading(true)
+  const handleRegister = async (data: FormValues) => {
+    setIsLoading(true)
 
     try {
       const { error } = await supabase.auth.signUp({
-        email,
-        password,
+        email: data.email,
+        password: data.password,
         options: {
           data: { role },
         },
@@ -63,69 +81,147 @@ export function Register() {
         variant: 'destructive',
       })
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-          <CardDescription>
-            Enter your information to create your GovRoll account
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleRegister}>
-          <CardContent className="space-y-4">
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                minLength={6}
-              />
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Creating account...' : 'Create account'}
-            </Button>
-            <div className="text-sm text-center">
-              Already have an account?{' '}
-              <Link to="/login" className="text-primary hover:underline">
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
+  };
+
+  return (
+    <div className="relative flex min-h-screen w-full flex-col md:flex-row">
+      {/* Left Panel: Form */}
+      <div className="flex w-full flex-col items-center justify-center bg-background p-8 md:w-1/2">
+        <div className="w-full max-w-md">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col gap-6"
+          >
+            <motion.div variants={itemVariants} className="mb-4">
+              <img src={logo} alt="GovRoll Logo" className="h-12 w-auto" />
+            </motion.div>
+            <motion.div variants={itemVariants} className="text-left">
+              <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
+              <p className="text-sm text-muted-foreground">Enter your information to create your GovRoll account</p>
+            </motion.div>
+
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleRegister)}
+                className="space-y-4"
+              >
+                <motion.div variants={itemVariants}>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email Address</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="name@example.com"
+                            {...field}
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+
+                <motion.div variants={itemVariants}>
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            {...field}
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+
+                <motion.div variants={itemVariants}>
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            {...field}
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
+
+                <motion.div variants={itemVariants}>
+                  <Button type="submit" className="w-full bg-[#01A5D8] hover:bg-[#01A5D8]/90" disabled={isLoading}>
+                    {isLoading && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Create account
+                  </Button>
+                </motion.div>
+              </form>
+            </Form>
+
+            <motion.p
+              variants={itemVariants}
+              className="px-8 text-center text-sm text-muted-foreground"
+            >
+              Already have an account?{" "}
+              <a
+                href="/login"
+                className="font-medium text-primary hover:underline"
+              >
                 Login
-              </Link>
-            </div>
-          </CardFooter>
-        </form>
-      </Card>
+              </a>
+              .
+            </motion.p>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Right Panel: Image */}
+      <div className="relative hidden w-1/2 md:block">
+        <img
+          src={loginFormImage}
+          alt="GovRoll Registration Illustration"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+      </div>
     </div>
   )
 }

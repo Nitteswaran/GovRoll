@@ -12,10 +12,11 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
 export const vectorStore = {
-    async listDocuments() {
+    async listDocuments(userId: string) {
         const { data, error } = await supabase
             .from('documents')
-            .select('metadata');
+            .select('metadata')
+            .eq('user_id', userId);
 
         if (error) throw error;
 
@@ -34,23 +35,25 @@ export const vectorStore = {
         return Array.from(uniqueDocs.values());
     },
 
-    async deleteDocument(filename: string) {
+    async deleteDocument(filename: string, userId: string) {
         const { error } = await supabase
             .from('documents')
             .delete()
+            .eq('user_id', userId)
             .filter('metadata->>source', 'eq', filename);
 
         if (error) throw error;
         return true;
     },
 
-    async saveDocument(content: string, metadata: any, embedding: number[]) {
+    async saveDocument(content: string, metadata: any, embedding: number[], userId: string) {
         const { data, error } = await supabase
             .from('documents')
             .insert({
                 content,
                 metadata,
-                embedding
+                embedding,
+                user_id: userId
             })
             .select();
 
@@ -61,12 +64,13 @@ export const vectorStore = {
         return data;
     },
 
-    async searchSimilarDocuments(queryEmbedding: number[], matchThreshold = 0.5, matchCount = 5) {
+    async searchSimilarDocuments(queryEmbedding: number[], matchThreshold = 0.5, matchCount = 5, userId: string) {
         const { data, error } = await supabase
             .rpc('match_documents', {
                 query_embedding: queryEmbedding,
                 match_threshold: matchThreshold,
-                match_count: matchCount
+                match_count: matchCount,
+                filter_user_id: userId
             });
 
         if (error) {

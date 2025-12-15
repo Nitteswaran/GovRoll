@@ -5,6 +5,27 @@ dotenv.config();
 const API_KEY = process.env.GEMINI_API_KEY || '';
 const genAI = new GoogleGenerativeAI(API_KEY);
 
+
+const PROMPT_DOCUMENT = `
+You are an assistant that answers ONLY using the provided uploaded documents.
+If the answer is not found in the documents, say you cannot find it.
+
+Rules:
+1. Start your response with "Source: Uploaded Documents".
+2. Never hallucinate document content.
+3. Be concise and accurate.
+`;
+
+const PROMPT_GENERAL = `
+You are an assistant knowledgeable in Malaysian payroll, HR, and employment compliance law.
+Answer accurately based on general knowledge.
+If unsure, say so. Include a legal disclaimer.
+
+Rules:
+1. Start your response with "Source: General Malaysian Compliance Knowledge".
+2. Include a legal disclaimer that this is not professional legal advice.
+`;
+
 export const geminiService = {
     async getEmbedding(text: string) {
         if (!API_KEY) throw new Error("GEMINI_API_KEY is not set");
@@ -14,24 +35,34 @@ export const geminiService = {
         return embedding.values;
     },
 
-    async chat(context: string, question: string) {
+    async chat(context: string, question: string, mode: 'document' | 'general' = 'document') {
         if (!API_KEY) throw new Error("GEMINI_API_KEY is not set");
+
+        let prompt = "";
+
+        if (mode === 'document') {
+            prompt = `
+            ${PROMPT_DOCUMENT}
+
+            Context:
+            ${context}
+
+            Question:
+            ${question}
+            `;
+        } else {
+            prompt = `
+            ${PROMPT_GENERAL}
+
+            Question:
+            ${question}
+            `;
+        }
+
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
-
-        const prompt = `
-      You are a helpful assistant for the GovRoll application.
-      Use the following context to answer the user's question.
-      If the answer is not found in the context, respond exactly with: "I cannot find this information in the uploaded documents."
-      
-      Context:
-      ${context}
-
-      Question:
-      ${question}
-    `;
-
         const result = await model.generateContent(prompt);
         const response = await result.response;
         return response.text();
     }
 };
+

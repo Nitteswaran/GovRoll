@@ -25,6 +25,7 @@ import { AuditLogsPage } from './pages/dashboard/audit-logs/index'
 import RagChatPage from './pages/dashboard/rag/index'
 import { LandingPage } from './pages/landing/index'
 import { Toaster } from './components/ui/toaster'
+import AuthFormSplitScreenDemo from './pages/auth/DemoLogin'
 
 const queryClient = new QueryClient()
 
@@ -208,6 +209,7 @@ function App() {
             }
           />
           <Route path="/" element={<LandingPage />} />
+          <Route path="/demo-login" element={<AuthFormSplitScreenDemo />} />
         </Routes>
         <Toaster />
       </BrowserRouter>
