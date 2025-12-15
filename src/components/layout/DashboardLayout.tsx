@@ -77,15 +77,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { path: '/dashboard/automation', label: 'Automation Rules', icon: Zap, premium: true, feature: 'automation-rules' },
     { path: '/dashboard/audit-logs', label: 'Audit Logs', icon: History, premium: true, feature: 'audit-logs' },
     { path: '/dashboard/settings', label: 'Settings', icon: Settings, premium: false },
+    { path: '/dashboard/rag', label: 'RAG Chat', icon: Sparkles, premium: false },
   ]
 
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
       <aside
-        className={`${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } fixed lg:static lg:translate-x-0 z-30 w-64 bg-white border-r border-gray-200 transition-transform duration-200 ease-in-out lg:flex flex-col h-full`}
+        className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } fixed lg:static lg:translate-x-0 z-30 w-64 bg-white border-r border-gray-200 transition-transform duration-200 ease-in-out lg:flex flex-col h-full`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:justify-center">
           <img src={logo} alt="GovRoll" className="h-16 w-auto" />
@@ -166,11 +166,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     setSidebarOpen(false)
                   }
                 }}
-                className={`flex items-center space-x-3 px-3 py-2 rounded-md transition-colors ${
-                  isActive
+                className={`flex items-center space-x-3 px-3 py-2 rounded-md transition-colors ${isActive
                     ? 'bg-primary text-primary-foreground'
                     : 'text-gray-700 hover:bg-gray-100'
-                } ${isLocked ? 'opacity-60' : ''}`}
+                  } ${isLocked ? 'opacity-60' : ''}`}
               >
                 <Icon className="h-5 w-5" />
                 <span className="flex-1">{item.label}</span>

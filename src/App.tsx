@@ -22,6 +22,7 @@ import { AnomalyDetectionPage } from './pages/dashboard/anomaly-detection/index'
 import { ReportsPage } from './pages/dashboard/reports/index'
 import { AutomationPage } from './pages/dashboard/automation/index'
 import { AuditLogsPage } from './pages/dashboard/audit-logs/index'
+import RagChatPage from './pages/dashboard/rag/index'
 import { LandingPage } from './pages/landing/index'
 import { Toaster } from './components/ui/toaster'
 
@@ -192,6 +193,16 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <AuditLogsPage />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/rag"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <RagChatPage />
                 </DashboardLayout>
               </ProtectedRoute>
             }
