@@ -18,6 +18,14 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Path rewriting middleware for Netlify Functions
+app.use((req, res, next) => {
+    if (req.url.startsWith('/.netlify/functions/lambda')) {
+        req.url = req.url.replace('/.netlify/functions/lambda', '');
+    }
+    next();
+});
+
 // File upload setup (memory storage for processing)
 const upload = multer({ storage: multer.memoryStorage() });
 
