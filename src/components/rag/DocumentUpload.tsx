@@ -17,7 +17,8 @@ export function DocumentUpload() {
         formData.append('file', file)
 
         try {
-            const response = await fetch('http://localhost:3001/api/upload', {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+            const response = await fetch(`${API_URL}/api/upload`, {
                 method: 'POST',
                 body: formData,
             })

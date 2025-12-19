@@ -16,7 +16,8 @@ export function DocumentList() {
     const fetchDocuments = async () => {
         setLoading(true)
         try {
-            const response = await fetch('http://localhost:3001/api/documents')
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+            const response = await fetch(`${API_URL}/api/documents`)
             if (!response.ok) throw new Error('Failed to fetch documents')
             const data = await response.json()
             setDocuments(data)
@@ -35,7 +36,8 @@ export function DocumentList() {
         if (!confirm(`Are you sure you want to delete ${filename}?`)) return
 
         try {
-            const response = await fetch(`http://localhost:3001/api/documents/${encodeURIComponent(filename)}`, {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+            const response = await fetch(`${API_URL}/api/documents/${encodeURIComponent(filename)}`, {
                 method: 'DELETE',
             })
 
