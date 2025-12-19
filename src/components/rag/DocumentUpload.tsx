@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone'
 import { Upload, Loader2 } from 'lucide-react'
 
 import { useToast } from '@/hooks/use-toast'
+import { supabase } from '@/lib/supabase'
 
 export function DocumentUpload() {
     const [uploading, setUploading] = useState(false)
@@ -17,9 +18,16 @@ export function DocumentUpload() {
         formData.append('file', file)
 
         try {
+            const { data: { session } } = await supabase.auth.getSession()
+            const token = session?.access_token
+
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
             const response = await fetch(`${API_URL}/api/upload`, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                    // request is FormData, so Content-Type is set automatically
+                },
                 body: formData,
             })
 

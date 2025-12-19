@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { FileText, Trash2, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
+import { supabase } from '@/lib/supabase'
 
 interface Document {
     source: string
@@ -16,8 +17,15 @@ export function DocumentList() {
     const fetchDocuments = async () => {
         setLoading(true)
         try {
+            const { data: { session } } = await supabase.auth.getSession()
+            const token = session?.access_token
+
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-            const response = await fetch(`${API_URL}/api/documents`)
+            const response = await fetch(`${API_URL}/api/documents`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             if (!response.ok) throw new Error('Failed to fetch documents')
             const data = await response.json()
             setDocuments(data)
@@ -36,9 +44,15 @@ export function DocumentList() {
         if (!confirm(`Are you sure you want to delete ${filename}?`)) return
 
         try {
+            const { data: { session } } = await supabase.auth.getSession()
+            const token = session?.access_token
+
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
             const response = await fetch(`${API_URL}/api/documents/${encodeURIComponent(filename)}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             })
 
             if (!response.ok) throw new Error('Failed to delete document')

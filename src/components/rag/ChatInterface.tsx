@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Send, Bot, User, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { supabase } from '@/lib/supabase'
 
 interface Message {
     role: 'user' | 'assistant'
@@ -27,10 +28,16 @@ export function ChatInterface() {
         setLoading(true)
 
         try {
+            const { data: { session } } = await supabase.auth.getSession()
+            const token = session?.access_token
+
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
             const response = await fetch(`${API_URL}/api/chat`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ question: userMessage.content }),
             })
 
