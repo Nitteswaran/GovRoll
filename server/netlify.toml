@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  functions = "dist/functions"
+  functions = "dist"
 
 [functions]
   external_node_modules = ["express", "serverless-http", "cors", "multer", "pdf-parse", "dotenv", "@google/generative-ai", "@supabase/supabase-js"]
