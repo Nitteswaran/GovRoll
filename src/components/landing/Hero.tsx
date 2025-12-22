@@ -2,6 +2,10 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import { InteractiveHoverButton } from '@/components/ui/interactive-hover-button'
+import logo from '@/assets/logo.png'
+import dashboardVideo from '@/assets/dashboard_video.mp4'
+
+
 
 export function Hero() {
   const navigate = useNavigate()
@@ -30,7 +34,8 @@ export function Hero() {
   } as const
 
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
+    <section className="relative pt-12 pb-20 md:pt-40 md:pb-32 overflow-hidden">
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
@@ -42,10 +47,18 @@ export function Hero() {
           >
             <motion.div
               variants={itemVariants}
+              className="md:hidden flex justify-center mb-8"
+            >
+              <img src={logo} alt="GovRoll" className="h-16 w-auto object-contain" />
+            </motion.div>
+
+            <motion.div
+              variants={itemVariants}
               className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium"
             >
               Welcome to GovRoll!
             </motion.div>
+
 
             <motion.h1
               variants={itemVariants}
@@ -93,30 +106,21 @@ export function Hero() {
             className="relative"
           >
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <div className="aspect-[4/3] bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <div className="w-32 h-32 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
-                    <svg
-                      className="w-16 h-16 text-primary"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600 text-sm">
-                    Dashboard Preview
-                  </p>
-                </div>
+              <div className="bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-auto object-contain"
+                >
+                  <source src={dashboardVideo} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </div>
           </motion.div>
+
         </div>
       </div>
 

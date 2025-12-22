@@ -85,7 +85,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Sidebar */}
       <aside
         className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          } fixed lg:static lg:translate-x-0 z-30 w-64 bg-white border-r border-gray-200 transition-transform duration-200 ease-in-out lg:flex flex-col h-full`}
+          } fixed lg:static lg:translate-x-0 z-50 w-64 bg-white border-r border-gray-200 transition-transform duration-200 ease-in-out lg:flex flex-col h-full shadow-lg lg:shadow-none`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:justify-center">
           <img src={logo} alt="GovRoll" className="h-16 w-auto" />
@@ -167,8 +167,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   }
                 }}
                 className={`flex items-center space-x-3 px-3 py-2 rounded-md transition-colors ${isActive
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-gray-700 hover:bg-gray-100'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-gray-700 hover:bg-gray-100'
                   } ${isLocked ? 'opacity-60' : ''}`}
               >
                 <Icon className="h-5 w-5" />
@@ -220,7 +220,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Overlay for mobile */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}

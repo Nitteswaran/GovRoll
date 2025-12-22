@@ -43,7 +43,7 @@ export function Navbar() {
       items={navLinks}
       onItemClick={handleNavClick}
       header={
-        <Link to="/" className="flex items-center shrink-0">
+        <Link to="/" className="hidden md:flex items-center shrink-0">
           <motion.img
             src={logo}
             alt="GovRoll"
